@@ -1,6 +1,8 @@
-hash: 26de8be38b40e66c972f7bc924f545b3c2832d6ef3644fd4637ed35bd795d3ff
-updated: 2017-03-27T15:24:00.804606174+02:00
+hash: 896dedfb8cb43131c47789d729be2545803b34582a24e4fa4e672b0d291a5c0a
+updated: 2017-03-27T18:42:53.291019288+02:00
 imports:
+- name: github.com/cactus/go-statsd-client
+  version: 91c326c3f7bd20f0226d3d1c289dd9f8ce28d33d
 - name: github.com/michaelklishin/rabbit-hole
   version: c5c30aa7b85409c68b9ba3f81dab4f24117dab85
 - name: github.com/sirupsen/logrus

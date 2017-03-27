@@ -8,5 +8,9 @@ func main() {
 	logrus.Info("Starting RabbitMQ Metrics Exporter")
 	var c = new(Scheduler)
 
-	c.Start()
+	err := c.Start()
+
+	if err != nil {
+		logrus.Error(err)
+	}
 }

@@ -14,13 +14,20 @@ type SchedulerInterface interface {
 type Scheduler struct {
 	ticker *time.Ticker
 	rabbit *rabbithole.Client
-	exporter *exporters.Exporter
+	exporter exporters.Exporter
 }
 
-func (s *Scheduler) Start() {
+func (s *Scheduler) Start() error {
 	s.rabbit, _ = rabbithole.NewClient("http://127.0.0.1:15672", "guest", "guest")
+	export, err := exporters.NewStatsDExporter("localhost")
 
-	s.ticker = time.NewTicker(time.Second * 2)
+	if err != nil {
+		return err
+	}
+
+	s.exporter = export
+
+	s.ticker = time.NewTicker(time.Second * 10)
 	for {
 		select {
 		case tickTime := <-s.ticker.C:
@@ -30,6 +37,7 @@ func (s *Scheduler) Start() {
 }
 
 func (s *Scheduler) tickHandler(time time.Time) {
+	// For now we only handle queues, other info can come later
 	queues, err := s.rabbit.ListQueues()
 
 	if err != nil {
@@ -37,5 +45,9 @@ func (s *Scheduler) tickHandler(time time.Time) {
 		return
 	}
 
-	logrus.Info(len(queues))
+	err = s.exporter.UpdateQueues(queues, "localhost", "/", time)
+
+	if err != nil {
+		logrus.Error(err)
+	}
 }
