@@ -1,0 +1,14 @@
+hash: 26de8be38b40e66c972f7bc924f545b3c2832d6ef3644fd4637ed35bd795d3ff
+updated: 2017-03-27T15:24:00.804606174+02:00
+imports:
+- name: github.com/michaelklishin/rabbit-hole
+  version: c5c30aa7b85409c68b9ba3f81dab4f24117dab85
+- name: github.com/sirupsen/logrus
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+- name: github.com/spf13/viper
+  version: 84f94806c67f59dd7ae87bc5351f7a9c94a4558d
+- name: golang.org/x/sys
+  version: afadfcc7779c1f4db0f6f6438afcb108d9c9c7cd
+  subpackages:
+  - unix
+testImports: []

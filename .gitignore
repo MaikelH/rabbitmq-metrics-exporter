@@ -1,0 +1,4 @@
+vendor/
+rabbitmq-metrics-exporter
+.idea
+*.iml
