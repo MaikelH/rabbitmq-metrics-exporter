@@ -3,7 +3,7 @@ jobs:
  build:
     docker:
       - image: golang:1.8.0
-    working_directory: ~/kolekto
+    working_directory: /go/src/github.com/maikelh/rabbitmq-metrics-exporter
     parallelism: 1
     environment:
     steps:
