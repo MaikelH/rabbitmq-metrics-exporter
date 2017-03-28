@@ -33,7 +33,7 @@ func (g *StatsDExporter) setupStatsD() error  {
 	//stats, err := statsd.NewBufferedClient(g.Host + ":" + strconv.Itoa(g.Port), "rabbitmq", 300*time.Millisecond ,0)
 	logrus.Info(fmt.Sprintf(g.Host + ":" + strconv.Itoa(g.Port)))
 
-	stats, err := statsd.NewClient(g.Host + ":" + strconv.Itoa(g.Port), "rabbtimq")
+	stats, err := statsd.NewClient(g.Host + ":" + strconv.Itoa(g.Port), "rabbitmq")
 
 	if err != nil {
 		return err
