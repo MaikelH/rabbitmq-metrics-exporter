@@ -18,8 +18,8 @@ type Scheduler struct {
 }
 
 func (s *Scheduler) Start() error {
-	s.rabbit, _ = rabbithole.NewClient("http://127.0.0.1:15672", "guest", "guest")
-	export, err := exporters.NewStatsDExporter("localhost")
+	s.rabbit, _ = rabbithole.NewClient("http://rabbitmq-service:15672", "guest", "guest")
+	export, err := exporters.NewStatsDExporter("statsd-service")
 
 	if err != nil {
 		return err
