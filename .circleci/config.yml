@@ -6,7 +6,6 @@ jobs:
     working_directory: /go/src/github.com/maikelh/rabbitmq-metrics-exporter
     parallelism: 1
     environment:
-      TAG=0.1.$CIRCLE_BUILD_NUM
     steps:
       - run:
           name: Install Glide
