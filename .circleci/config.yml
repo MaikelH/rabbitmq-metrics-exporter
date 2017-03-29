@@ -28,7 +28,7 @@ jobs:
       - deploy:
           name: Deploy only on release branch
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
+            TAG=0.2.0.$CIRCLE_BUILD_NUM
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               docker push maikelh/rabbitmq-metrics-exporter:$TAG
