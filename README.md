@@ -17,7 +17,7 @@ An other options is to build the application yourself, see the building instruct
 The tool use the excellent viper library which means you can supply the configuration in multiple formats. An example in
 JSON is given below with all the possible options with default values.
 
-```
+```json
 "rabbitmq" : {
     "host": "localhost",
     "port": 15672,
