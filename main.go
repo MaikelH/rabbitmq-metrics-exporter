@@ -26,8 +26,8 @@ func SetupConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	viper.SetConfigName("config")
-	viper.AddConfigPath("/etc/appname/")   // path to look for the config file in
-	viper.AddConfigPath("$HOME/.appname")  // call multiple times to add many search paths
+	viper.AddConfigPath("/etc/rabbitmq-metrics-exporter/")   // path to look for the config file in
+	viper.AddConfigPath("$HOME/.rabbitmq-metrics-exporter")  // call multiple times to add many search paths
 	viper.AddConfigPath(".")
 
 	viper.SetDefault("rabbitmq.host", "localhost")
