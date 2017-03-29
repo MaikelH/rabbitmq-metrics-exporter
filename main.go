@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"strings"
 )
 
 func main() {
@@ -19,6 +20,11 @@ func main() {
 }
 
 func SetupConfig() {
+	// Enable use of environment variables
+	viper.SetEnvPrefix("RME")
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
 	viper.SetConfigName("config")
 	viper.AddConfigPath("/etc/appname/")   // path to look for the config file in
 	viper.AddConfigPath("$HOME/.appname")  // call multiple times to add many search paths
@@ -33,9 +39,6 @@ func SetupConfig() {
 	viper.SetDefault("exporter.host",  "localhost")
 	viper.SetDefault("exporter.port",  8125)
 
-	err := viper.ReadInConfig()
 
-	if err != nil {
-		logrus.Warn("No config file found, using defaults")
-	}
+	_ := viper.ReadInConfig()
 }
