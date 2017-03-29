@@ -57,12 +57,13 @@ func (g *StatsDExporter) UpdateQueues(queues []rabbithole.QueueInfo, host string
 
 		var queuePrefix = prefix + queueName
 
-		g.client.Inc(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate)
-		g.client.Inc(queuePrefix + ".messages.ready", int64(queue.MessagesReady), samplingRate)
-		g.client.Inc(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate )
+		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.ready", int64(queue.MessagesReady), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), samplingRate)
 
-		g.client.Inc(queuePrefix + ".rates.deliver", int64(queue.MessageStats.DeliverDetails.Rate), samplingRate)
-		g.client.Inc(queuePrefix + ".rates.publish", int64(queue.MessageStats.PublishDetails.Rate), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.deliver", int64(queue.MessageStats.DeliverDetails.Rate), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.publish", int64(queue.MessageStats.PublishDetails.Rate), samplingRate)
 	}
 
 	logrus.Info("Sending metrics to StatsD")
