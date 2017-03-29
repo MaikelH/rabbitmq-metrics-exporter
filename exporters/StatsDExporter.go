@@ -7,6 +7,7 @@ import (
 	"github.com/cactus/go-statsd-client/statsd"
 	"strconv"
 	"fmt"
+	"strings"
 )
 
 type StatsDExporter struct {
@@ -48,10 +49,14 @@ func (g *StatsDExporter) UpdateQueues(queues []rabbithole.QueueInfo, host string
 	var prefix = "queues."
 
 	for _,queue := range queues {
-		var queuePrefix = prefix + queue.Name
+		// Replace all dots in the string name by hypens, since dots dictate different metrics in graphite
+		var queueName = strings.Replace(queue.Name, ".", "-", -1)
+
+		var queuePrefix = prefix + queueName
 
 		g.client.Inc(queuePrefix + ".messages.total", int64(queue.Messages), 1.0)
 		g.client.Inc(queuePrefix + ".messages.ready", int64(queue.MessagesReady), 1.0)
+		g.client.Inc(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), 1.0)
 	}
 
 	logrus.Info("Sending metrics to StatsD")
