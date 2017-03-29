@@ -40,5 +40,5 @@ func SetupConfig() {
 	viper.SetDefault("exporter.port",  8125)
 
 
-	_ := viper.ReadInConfig()
+	viper.ReadInConfig()
 }
