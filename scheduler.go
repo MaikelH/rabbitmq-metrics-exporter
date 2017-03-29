@@ -31,7 +31,7 @@ func (s *Scheduler) Start() error {
 
 	s.exporter = export
 
-	s.ticker = time.NewTicker(time.Second * 10)
+	s.ticker = time.NewTicker(time.Second * 5)
 	for {
 		select {
 		case tickTime := <-s.ticker.C:
