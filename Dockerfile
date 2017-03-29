@@ -1,3 +1,3 @@
-FROM alpine:3.5
-COPY rabbitmq-metrics-exporter /app/rabbitmq-metrics-exporter
-CMD /app/rabbitmq-metrics-exporter
+FROM golang:1.8.0
+ADD ["rabbitmq-metrics-exporter", "/app/rabbitmq"]
+CMD ["/app/rabbitmq"]
