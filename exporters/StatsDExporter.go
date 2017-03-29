@@ -49,15 +49,20 @@ func (g *StatsDExporter) setupStatsD() error  {
 func (g *StatsDExporter) UpdateQueues(queues []rabbithole.QueueInfo, host string, vhost string, time time.Time) error {
 	var prefix = "queues."
 
+	var samplingRate = float32(1.0)
+
 	for _,queue := range queues {
 		// Replace all dots in the string name by hypens, since dots dictate different metrics in graphite
 		var queueName = strings.Replace(queue.Name, ".", "-", -1)
 
 		var queuePrefix = prefix + queueName
 
-		g.client.Inc(queuePrefix + ".messages.total", int64(queue.Messages), 1.0)
-		g.client.Inc(queuePrefix + ".messages.ready", int64(queue.MessagesReady), 1.0)
-		g.client.Inc(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), 1.0)
+		g.client.Inc(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate)
+		g.client.Inc(queuePrefix + ".messages.ready", int64(queue.MessagesReady), samplingRate)
+		g.client.Inc(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), samplingRate)
+
+		g.client.Inc(queuePrefix + ".rates.deliver", int64(queue.MessageStats.DeliverDetails.Rate), samplingRate)
+		g.client.Inc(queuePrefix + ".rates.publish", int64(queue.MessageStats.PublishDetails.Rate), samplingRate)
 	}
 
 	logrus.Info("Sending metrics to StatsD")
