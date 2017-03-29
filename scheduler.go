@@ -5,6 +5,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/michaelklishin/rabbit-hole"
 	"github.com/maikelh/rabbitmq-metrics-exporter/exporters"
+	"fmt"
+	"github.com/spf13/viper"
 )
 
 type SchedulerInterface interface {
@@ -18,8 +20,10 @@ type Scheduler struct {
 }
 
 func (s *Scheduler) Start() error {
-	s.rabbit, _ = rabbithole.NewClient("http://rabbitmq-service:15672", "guest", "guest")
-	export, err := exporters.NewStatsDExporter("statsd-service")
+	var rabbitmqUrl = fmt.Sprintf("http://%s:%s", viper.GetString("rabbitmq.host"), viper.GetString("RabbitMQ.port"))
+
+	s.rabbit, _ = rabbithole.NewClient(rabbitmqUrl, viper.GetString("RabbitMQ.user"), viper.GetString("RabbitMQ.password"))
+	export, err := exporters.CreateExporter(viper.GetString("exporter.type"))
 
 	if err != nil {
 		return err

@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"fmt"
 	"strings"
+	"github.com/spf13/viper"
 )
 
 type StatsDExporter struct {
@@ -16,10 +17,10 @@ type StatsDExporter struct {
 	client statsd.Statter
 }
 
-func NewStatsDExporter(host string) (*StatsDExporter, error) {
+func NewStatsDExporter() (*StatsDExporter, error) {
 	g := new(StatsDExporter)
-	g.Host = host
-	g.Port = 8125
+	g.Host = viper.GetString("exporter.host")
+	g.Port = viper.GetInt("exporter.port")
 
 	err := g.setupStatsD()
 
@@ -32,7 +33,7 @@ func NewStatsDExporter(host string) (*StatsDExporter, error) {
 
 func (g *StatsDExporter) setupStatsD() error  {
 	//stats, err := statsd.NewBufferedClient(g.Host + ":" + strconv.Itoa(g.Port), "rabbitmq", 300*time.Millisecond ,0)
-	logrus.Info(fmt.Sprintf(g.Host + ":" + strconv.Itoa(g.Port)))
+	logrus.Info(fmt.Sprintf("Setting StatsD host to: " + g.Host + ":" + strconv.Itoa(g.Port)))
 
 	stats, err := statsd.NewClient(g.Host + ":" + strconv.Itoa(g.Port), "rabbtimq")
 
