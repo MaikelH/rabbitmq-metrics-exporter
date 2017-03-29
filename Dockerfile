@@ -1,3 +1,3 @@
-FROM golang:1.8.0
-ADD ["rabbitmq-metrics-exporter", "/app/rabbitmq"]
-CMD ["/app/rabbitmq"]
+FROM alpine:3.5
+ADD ["rabbitmq-metrics-exporter", "/app/rabbitmq-metrics-exporter"]
+CMD ["/app/rabbitmq-metrics-exporter"]

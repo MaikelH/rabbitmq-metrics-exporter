@@ -12,7 +12,7 @@ jobs:
           command: curl https://glide.sh/get | sh
       - checkout
       - run: glide install
-      - run: go build
+      - run: go build -tags netgo -a -v
       - setup_remote_docker
       - run:
           name: Install Docker client
