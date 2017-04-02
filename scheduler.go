@@ -7,6 +7,7 @@ import (
 	"github.com/maikelh/rabbitmq-metrics-exporter/exporters"
 	"fmt"
 	"github.com/spf13/viper"
+	"github.com/maikelh/rabbitmq-metrics-exporter/structs"
 )
 
 type SchedulerInterface interface {
@@ -43,7 +44,7 @@ func (s *Scheduler) Start() error {
 func (s *Scheduler) tickHandler(time time.Time) {
 
 	// For now we only handle queues, other info can come later
-	queues, err := s.rabbit.ListQueues()
+	queues, err := s.getQueueInformation()
 
 	if err != nil {
 		logrus.Error(err)
@@ -57,17 +58,17 @@ func (s *Scheduler) tickHandler(time time.Time) {
 	}
 }
 
-func (s *Scheduler) getQueueInformation() ([]Queue, error) {
+func (s *Scheduler) getQueueInformation() ([]structs.Queue, error) {
 	rabbitQueues, err := s.rabbit.ListQueues()
 
 	if err != nil {
 		return nil, err
 	}
 
-	var queues []Queue
+	var queues []structs.Queue
 
 	for _, rabbitQueue := range rabbitQueues {
-		var queue = Queue{}
+		var queue = structs.Queue{}
 
 		queue.Name = rabbitQueue.Name
 		queue.Node = rabbitQueue.Node
@@ -87,18 +88,3 @@ func (s *Scheduler) getQueueInformation() ([]Queue, error) {
 	return queues, nil
 }
 
-type Queue struct {
-	Name string
-	Vhost string
-	Node string
-	Durable bool
-	AutoDelete bool
-	MessagesTotal int64
-	MessagesReady int64
-	MessagesUnacknowledged int64
-
-	MessageBytes int64
-
-	RateDelivered int64
-	RatePublished int64
-}
