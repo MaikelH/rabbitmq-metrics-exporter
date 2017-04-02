@@ -41,6 +41,7 @@ func (s *Scheduler) Start() error {
 }
 
 func (s *Scheduler) tickHandler(time time.Time) {
+
 	// For now we only handle queues, other info can come later
 	queues, err := s.rabbit.ListQueues()
 
@@ -54,4 +55,50 @@ func (s *Scheduler) tickHandler(time time.Time) {
 	if err != nil {
 		logrus.Error(err)
 	}
+}
+
+func (s *Scheduler) getQueueInformation() ([]Queue, error) {
+	rabbitQueues, err := s.rabbit.ListQueues()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var queues []Queue
+
+	for _, rabbitQueue := range rabbitQueues {
+		var queue = Queue{}
+
+		queue.Name = rabbitQueue.Name
+		queue.Node = rabbitQueue.Node
+		queue.Vhost = rabbitQueue.Vhost
+		queue.AutoDelete = rabbitQueue.AutoDelete
+		queue.Durable = rabbitQueue.Durable
+
+		queue.MessagesTotal = int64(rabbitQueue.Messages)
+		queue.MessagesReady = int64(rabbitQueue.MessagesReady)
+		queue.MessagesUnacknowledged = int64(rabbitQueue.MessagesUnacknowledged)
+		queue.MessageBytes = int64(rabbitQueue.MessagesBytes)
+
+		queue.RateDelivered = int64(rabbitQueue.MessageStats.DeliverDetails.Rate)
+		queue.RateDelivered = int64(rabbitQueue.MessageStats.PublishDetails.Rate)
+	}
+
+	return queues, nil
+}
+
+type Queue struct {
+	Name string
+	Vhost string
+	Node string
+	Durable bool
+	AutoDelete bool
+	MessagesTotal int64
+	MessagesReady int64
+	MessagesUnacknowledged int64
+
+	MessageBytes int64
+
+	RateDelivered int64
+	RatePublished int64
 }

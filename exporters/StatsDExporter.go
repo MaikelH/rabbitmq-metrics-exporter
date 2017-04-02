@@ -57,7 +57,6 @@ func (g *StatsDExporter) UpdateQueues(queues []rabbithole.QueueInfo, host string
 
 		var queuePrefix = prefix + queueName
 
-		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate )
 		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate)
 		g.client.Gauge(queuePrefix + ".messages.ready", int64(queue.MessagesReady), samplingRate)
 		g.client.Gauge(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), samplingRate)
