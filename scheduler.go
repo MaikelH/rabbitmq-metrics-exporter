@@ -49,7 +49,7 @@ func (s *Scheduler) tickHandler(time time.Time) {
 		return
 	}
 
-	err = s.exporter.UpdateQueues(queues, "localhost", "/", time)
+	err = s.exporter.UpdateQueues(queues, viper.GetString("rabbitmq.host"), "/", time)
 
 	if err != nil {
 		logrus.Error(err)
