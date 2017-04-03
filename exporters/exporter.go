@@ -1,13 +1,13 @@
 package exporters
 
 import (
-	"github.com/michaelklishin/rabbit-hole"
 	"time"
 	"errors"
+	"github.com/maikelh/rabbitmq-metrics-exporter/structs"
 )
 
 type Exporter interface {
-	UpdateQueues(queues []rabbithole.QueueInfo, host string, vhost string, time time.Time) error
+	UpdateQueues(queues []structs.Queue, host string, vhost string, time time.Time) error
 }
 
 func CreateExporter(name string) (Exporter, error) {

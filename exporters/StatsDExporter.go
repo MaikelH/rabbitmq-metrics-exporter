@@ -1,7 +1,6 @@
 package exporters
 
 import (
-	"github.com/michaelklishin/rabbit-hole"
 	"time"
 	"github.com/sirupsen/logrus"
 	"github.com/cactus/go-statsd-client/statsd"
@@ -9,6 +8,7 @@ import (
 	"fmt"
 	"strings"
 	"github.com/spf13/viper"
+	"github.com/maikelh/rabbitmq-metrics-exporter/structs"
 )
 
 type StatsDExporter struct {
@@ -46,7 +46,7 @@ func (g *StatsDExporter) setupStatsD() error  {
 	return nil
 }
 
-func (g *StatsDExporter) UpdateQueues(queues []rabbithole.QueueInfo, host string, vhost string, time time.Time) error {
+func (g *StatsDExporter) UpdateQueues(queues []structs.Queue, host string, vhost string, time time.Time) error {
 	var prefix = "queues."
 
 	var samplingRate = float32(1.0)
@@ -57,13 +57,19 @@ func (g *StatsDExporter) UpdateQueues(queues []rabbithole.QueueInfo, host string
 
 		var queuePrefix = prefix + queueName
 
-		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate )
-		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.Messages), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.total", int64(queue.MessagesTotal), samplingRate)
 		g.client.Gauge(queuePrefix + ".messages.ready", int64(queue.MessagesReady), samplingRate)
 		g.client.Gauge(queuePrefix + ".messages.unacknowledged", int64(queue.MessagesUnacknowledged), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.bytes", int64(queue.MessageBytes), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.bytes-ready", int64(queue.MessageBytesReady), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.ram", int64(queue.MessagesRAM), samplingRate)
+		g.client.Gauge(queuePrefix + ".messages.persistent", int64(queue.MessagesPersistent), samplingRate)
 
-		g.client.Gauge(queuePrefix + ".rates.deliver", int64(queue.MessageStats.DeliverDetails.Rate), samplingRate)
-		g.client.Gauge(queuePrefix + ".rates.publish", int64(queue.MessageStats.PublishDetails.Rate), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.deliver", int64(queue.RateDelivered), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.deliver-get", int64(queue.RateDeliveredGet), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.deliver-noack", int64(queue.RateDeliveredNoAck), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.publish", int64(queue.RatePublished), samplingRate)
+		g.client.Gauge(queuePrefix + ".rates.redeliver", int64(queue.RateRedelivered), samplingRate)
 	}
 
 	logrus.Info("Sending metrics to StatsD")

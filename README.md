@@ -1,4 +1,4 @@
-# RabbitMQ metrics exporter
+# RabbitMQ metrics exporter [![CircleCI](https://circleci.com/gh/MaikelH/rabbitmq-metrics-exporter.svg?style=svg)](https://circleci.com/gh/MaikelH/rabbitmq-metrics-exporter)
 
 Tool to help export metrics from RabbitMQ to a metrics backend.
 
@@ -48,6 +48,10 @@ So for example to set the RabbitMQ host we can set the following environment var
 
 
 ## How to build
+```bash
+# Install dependencies using glide
+glide install
 
-TODO
-
+# Build or install
+go build
+```
