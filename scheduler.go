@@ -80,9 +80,16 @@ func (s *Scheduler) getQueueInformation() ([]structs.Queue, error) {
 		queue.MessagesReady = int64(rabbitQueue.MessagesReady)
 		queue.MessagesUnacknowledged = int64(rabbitQueue.MessagesUnacknowledged)
 		queue.MessageBytes = int64(rabbitQueue.MessagesBytes)
+		queue.MessageBytesReady = int64(rabbitQueue.MessagesBytes)
+		queue.MessagesRAM = int64(rabbitQueue.MessagesRAM)
+		queue.MessagesPersistent = int64(rabbitQueue.MessagesPersistent)
 
 		queue.RateDelivered = int64(rabbitQueue.MessageStats.DeliverDetails.Rate)
-		queue.RateDelivered = int64(rabbitQueue.MessageStats.PublishDetails.Rate)
+		queue.RateDeliveredGet = int64(rabbitQueue.MessageStats.DeliverGetDetails.Rate)
+		queue.RateDeliveredNoAck = int64(rabbitQueue.MessageStats.DeliverNoAckDetails.Rate)
+		queue.RatePublished = int64(rabbitQueue.MessageStats.PublishDetails.Rate)
+		queue.RateRedelivered = int64(rabbitQueue.MessageStats.RedeliverDetails.Rate)
+
 	}
 
 	return queues, nil
