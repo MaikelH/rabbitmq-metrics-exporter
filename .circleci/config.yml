@@ -23,12 +23,12 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
       - run: |
-            TAG=0.2.2
+            TAG=0.2.3
             docker build -t maikelh/rabbitmq-metrics-exporter:$TAG .
       - deploy:
           name: Deploy only on release branch
           command: |
-            TAG=0.2.2
+            TAG=0.2.3
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               docker push maikelh/rabbitmq-metrics-exporter:$TAG
