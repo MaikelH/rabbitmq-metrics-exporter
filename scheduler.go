@@ -90,6 +90,7 @@ func (s *Scheduler) getQueueInformation() ([]structs.Queue, error) {
 		queue.RatePublished = int64(rabbitQueue.MessageStats.PublishDetails.Rate)
 		queue.RateRedelivered = int64(rabbitQueue.MessageStats.RedeliverDetails.Rate)
 
+		queues = append(queues, queue)
 	}
 
 	return queues, nil

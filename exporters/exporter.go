@@ -14,7 +14,10 @@ func CreateExporter(name string) (Exporter, error) {
 	switch name {
 	case "statsd":
 		return NewStatsDExporter()
+	case "console":
+		return NewConsoleExporter()
 	}
+
 
 	return nil, errors.New("No valid exporter type given")
 }
