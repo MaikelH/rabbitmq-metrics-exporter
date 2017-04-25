@@ -23,7 +23,16 @@ type Scheduler struct {
 func (s *Scheduler) Start() error {
 	var rabbitmqUrl = fmt.Sprintf("http://%s:%s", viper.GetString("rabbitmq.host"), viper.GetString("RabbitMQ.port"))
 
-	s.rabbit, _ = rabbithole.NewClient(rabbitmqUrl, viper.GetString("RabbitMQ.user"), viper.GetString("RabbitMQ.password"))
+	logrus.Info("Connecting to rabbitmq", rabbitmqUrl)
+
+	client, err := rabbithole.NewClient(rabbitmqUrl, viper.GetString("RabbitMQ.user"), viper.GetString("RabbitMQ.password"))
+
+	if err != nil {
+		return err
+	}
+
+	s.rabbit = client
+
 	export, err := exporters.CreateExporter(viper.GetString("exporter.type"))
 
 	if err != nil {
@@ -36,6 +45,7 @@ func (s *Scheduler) Start() error {
 	for {
 		select {
 		case tickTime := <-s.ticker.C:
+			logrus.Info("Tick received")
 			s.tickHandler(tickTime)
 		}
 	}
